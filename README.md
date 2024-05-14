@@ -19,7 +19,7 @@ cp .env.example .env
 ```
 ### 5. Migrate the database
 ```bash
-php artisan migrate:fresh --seed
+php artisan migrate --seed
 ```
 ### 6. Run the node development server
 ```bash
