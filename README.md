@@ -5,11 +5,11 @@
 ## How to install
 
 ### 1. Clone the repository
-### 2. install composer dependencies.
+### 2. Install composer dependencies.
 ```bash
 composer install
 ```
-### 3. install node dependencies.
+### 3. Install node dependencies.
 ```bash
 npm install
 ```
@@ -19,13 +19,13 @@ cp .env.example .env
 ```
 ### 5. Migrate the database
 ```bash
-php artisan migrate
+php artisan migrate:fresh --seed
 ```
 ### 6. Run the node development server
 ```bash
 npm run dev
 ```
-### 7. Run the server
+### 7. Run the web server
 ```bash
 php artisan serve
 ```
