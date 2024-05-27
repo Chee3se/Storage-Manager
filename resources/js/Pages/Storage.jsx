@@ -1,11 +1,10 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import Layout from '@/Layouts/Layout';
 import { Head } from '@inertiajs/react';
 
 export default function Storage({ auth }) {
     return (
-        <AuthenticatedLayout
+        <Layout
             user={auth.user}
-            role={auth.role}
             header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Home</h2>}
         >
             <Head title="Storage" />
@@ -19,6 +18,6 @@ export default function Storage({ auth }) {
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </Layout>
     );
 }

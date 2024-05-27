@@ -1,11 +1,10 @@
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import Layout from '@/Layouts/Layout';
 import { Head } from '@inertiajs/react';
 
 export default function Order({ auth }) {
     return (
-        <AuthenticatedLayout
+        <Layout
             user={auth.user}
-            role={auth.role}
             header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Home</h2>}
         >
             <Head title="Order" />
@@ -17,6 +16,6 @@ export default function Order({ auth }) {
                     </div>
                 </div>
             </div>
-        </AuthenticatedLayout>
+        </Layout>
     );
 }
