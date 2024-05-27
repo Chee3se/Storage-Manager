@@ -5,8 +5,9 @@ import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link } from '@inertiajs/react';
 import ThemeButton from '@/Components/ThemeButton';
 
-export default function Authenticated({ user, header, children }) {
+export default function Authenticated({ user,  header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -29,6 +30,14 @@ export default function Authenticated({ user, header, children }) {
                                 <NavLink href={route('order')} active={route().current('order')}>
                                     Order
                                 </NavLink>
+
+                                {user?.roles[0]?.name === 'admin' ? (
+                                    <NavLink href={route('admin.index')} active={route().current('admin')}>
+                                    Admin
+                                </NavLink>
+                                ) : null }
+
+                                
                             </div>
                             
                         </div>
