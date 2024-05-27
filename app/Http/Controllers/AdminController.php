@@ -1,15 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
-use Illuminate\Http\Request;
-
 class AdminController extends Controller
 {
-    public function index()
+    public function index():Response
     {
-        return inertia::render('Admin');
+        return Inertia::render('Admin');
     }
 }

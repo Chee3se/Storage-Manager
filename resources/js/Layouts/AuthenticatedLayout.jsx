@@ -7,8 +7,6 @@ import ThemeButton from '@/Components/ThemeButton';
 
 export default function Authenticated({ user,  header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
-
-
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
             <nav className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
@@ -32,14 +30,14 @@ export default function Authenticated({ user,  header, children }) {
                                 </NavLink>
 
                                 {user?.roles[0]?.name === 'admin' ? (
-                                    <NavLink href={route('admin.index')} active={route().current('admin')}>
+                                    <NavLink href={route('admin.index')} active={route().current('admin.index')}>
                                     Admin
                                 </NavLink>
                                 ) : null }
 
-                                
+
                             </div>
-                            
+
                         </div>
 
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
@@ -54,8 +52,8 @@ export default function Authenticated({ user,  header, children }) {
                                                     >
                                                         {user.name}
 
-                                                        <svg 
-                                                            
+                                                        <svg
+
                                                             className="ms-2 -me-0.5 h-4 w-4"
                                                             xmlns="http://www.w3.org/2000/svg"
                                                             viewBox="0 0 20 20"
