@@ -58,7 +58,7 @@ export default function UserSearch() {
     };
 
     const ArrowIcon = ({ field }) => (
-        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"  fill="#e8eaed" >
+        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"  fill="#e8eaed" className='fill-black dark:fill-white'>
         <path d={sort.field === field && sort.order === 'asc' ? "M7 14l5-5 5 5z" : "M7 10l5 5 5-5z"} />
     </svg>
     );
@@ -106,8 +106,12 @@ export default function UserSearch() {
                         <th scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                             style={{minWidth: '200px'}}>
-                            <button>ROLE</button>
-                        </th>
+                             <button onClick={() => handleSort('role')} className='flex flex-row'>Role <ArrowIcon field='role'/></button>
+                       </th>
+                       <th scope="col"
+                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                            style={{minWidth: '200px'}}>
+                       </th>
                     </tr>
                     </thead>
                     <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
@@ -124,6 +128,27 @@ export default function UserSearch() {
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm text-gray-500 dark:text-gray-400">{entry.roles[0]?.name}</div>
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap">
+                                <div className="text-sm text-gray-900 dark:text-gray-100">
+                                    <button className='bg-blue-800 p-2 rounded-lg text-white hover:bg-blue-600 duration-200 mr-3' href='/admin/edit'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed" className='fill-white'>
+                                            <path d="M160-400v-80h280v80H160Zm0-160v-80h440v80H160Zm0-160v-80h440v80H160Zm360 560v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/>
+                                        </svg>
+                                    </button>
+
+                                    <button className='bg-red-800 p-2 rounded-lg text-white hover:bg-red-600 duration-200 mr-3'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"
+                                            ><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+                                        </svg>
+                                    </button> 
+                                    
+                                    <button className='bg-cyan-800 p-2 rounded-lg text-white hover:bg-cyan-600 duration-200 mr-3'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                                            <path d="M80-200v-80h800v80H80Zm46-242-52-30 34-60H40v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Z"/>
+                                        </svg> 
+                                    </button>
+                                        </div>
                             </td>
                         </tr>
                     ))}
