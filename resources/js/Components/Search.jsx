@@ -1,35 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
-export default function UserSearch() {
+export default function Search({model}) {
     const input = useRef();
     const [search, setSearch] = useState('');
     const [entries, setEntries] = useState([]);
     const [page, setPage] = useState(1);
-    const [perPage] = useState(10); 
-    const [totalPages, setTotalPages] = useState(0); 
-    const [sort, setSort] = useState({field: 'id', order: 'asc'})
-    const [rawEntries, setRawEntries] = useState([])
+    const [perPage, setPerPage] = useState(10);
 
     useEffect(() => {
         fetchEntries();
-    }, [search, page]); 
-
-    useEffect(() => {
-        sortEntries();
-    }, [sort, rawEntries]);
+    }, [search]); 
 
     const fetchEntries = async () => {
         try {
-            const response = await axios.get(route('admin.users.index'), {
+            const response = await axios.get(route(`admin.${model.toLowerCase()}.index`), {
                 params: {
                     search,
                     page,
                     perPage
                 }
             });
-            setRawEntries(response.data.data); 
-            setTotalPages(Math.ceil(response.data.total / perPage)); 
+            setEntries(response.data.data); 
         } catch (error) {
             console.error(error);
         }
@@ -38,45 +30,6 @@ export default function UserSearch() {
     const handleSearch = (e) => {
         setSearch(e.target.value);
     };
-
-    const handleNextPage = () => {
-        if (page < totalPages) { // Check if current page is less than total pages
-            setPage(prevPage => prevPage + 1);
-        }
-    };
-
-    const handlePrevPage = () => {
-        setPage(prevPage => Math.max(prevPage - 1, 1));
-    };
-
-
-    const handleSort = (field) => {
-        setSort(prevSort => {
-            const newOrder = prevSort.field === field && prevSort.order === 'asc' ? 'desc' : 'asc';
-            setEntries(prevEntries => [...prevEntries].sort((a, b) => {
-                if (a[field] < b[field]) return newOrder === 'asc' ? -1 : 1;
-                if (a[field] > b[field]) return newOrder === 'asc' ? 1 : -1;
-                return 0;
-            }));
-            return {field, order: newOrder};
-        });
-    };
-    
-    const sortEntries = () => {
-        setEntries([...rawEntries].sort((a, b) => {
-            if (a[sort.field] < b[sort.field]) return sort.order === 'asc' ? -1 : 1;
-            if (a[sort.field] > b[sort.field]) return sort.order === 'asc' ? 1 : -1;
-            return 0;
-        }));
-    };
-  
-
-
-    const ArrowIcon = ({ field }) => (
-        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"  fill="#e8eaed" >
-        <path d={sort.field === field && sort.order === 'asc' ? "M7 14l5-5 5 5z" : "M7 10l5 5 5-5z"} />
-    </svg>
-    );
 
     return (
         <div className="bg-stone-100 dark:bg-gray-950 px-4 py-2 rounded-md" style={{maxWidth: '100%'}}>
@@ -87,7 +40,7 @@ export default function UserSearch() {
                         className='border-0 dark:border-0 bg-stone-200 dark:bg-gray-900 dark:text-gray-300 focus:border-0 dark:focus:border-0 focus:ring-0 dark:focus:ring-0 rounded-md shadow-sm pl-10'
                         ref={input}
                         value={search}
-                        placeholder={`Search Users...`}
+                        placeholder={`Search ${model}`}
                         onChange={handleSearch}
                     />
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -106,22 +59,22 @@ export default function UserSearch() {
                         <th scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                             style={{minWidth: '100px'}}>
-                             <button onClick={() => handleSort('id')} className='flex flex-row'>ID <ArrowIcon field='id' /></button>
+                            ID
                         </th>
                         <th scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                             style={{minWidth: '200px'}}>
-                             <button onClick={() => handleSort('name')} className='flex flex-row'>Name <ArrowIcon field='name'/></button>
+                            Name
                         </th>
                         <th scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                             style={{minWidth: '200px'}}>
-                             <button onClick={() => handleSort('email')} className='flex flex-row'>EMAIL <ArrowIcon field='email'/></button>
+                            Email
                         </th>
                         <th scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                             style={{minWidth: '200px'}}>
-                            <button>ROLE</button>
+                            Role
                         </th>
                     </tr>
                     </thead>
@@ -146,21 +99,7 @@ export default function UserSearch() {
                 </table>
             </div>
             <div>
-                <div>
-                    <div className="flex justify-between items-center my-4">
-                        <button onClick={handlePrevPage} className="text-blue-500 hover:text-blue-700 dark:text-white dark:hover:text-gray-300 font-bold py-2 px-4 rounded">
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"  fill="currentColor">
-                                <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z"/>
-                            </svg>
-                        </button>
-                        <span className="text-gray-700 dark:text-gray-300">{page}</span>
-                        <button onClick={handleNextPage} className={`text-blue-500 hover:text-blue-700 dark:text-white dark:hover:text-gray-300 font-bold py-2 px-4 rounded ${page >= totalPages ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
-                                <path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
+                {/* Render your pagination controls here */}
             </div>
         </div>
     );
