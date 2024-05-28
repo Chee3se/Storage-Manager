@@ -1,23 +1,23 @@
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
+import Modal from '@/Components/Modal.jsx';
 
 export default function UserSearch() {
     const input = useRef();
     const [search, setSearch] = useState('');
     const [entries, setEntries] = useState([]);
     const [page, setPage] = useState(1);
-    const [perPage] = useState(10); 
-    const [totalPages, setTotalPages] = useState(0); 
+    const [perPage] = useState(10);
+    const [totalPages, setTotalPages] = useState(0);
     const [sort, setSort] = useState({field: 'id', order: 'asc'})
-    const [rawEntries, setRawEntries] = useState([])
 
     useEffect(() => {
         fetchEntries();
-    }, [search, page]); 
+    }, [search, page, sort]);
 
     useEffect(() => {
-        sortEntries();
-    }, [sort, rawEntries]);
+        setPage(1);
+    }, [search, sort]);
 
     const fetchEntries = async () => {
         try {
@@ -25,11 +25,12 @@ export default function UserSearch() {
                 params: {
                     search,
                     page,
-                    perPage
+                    perPage,
+                    sort: sort
                 }
             });
-            setRawEntries(response.data.data); 
-            setTotalPages(Math.ceil(response.data.total / perPage)); 
+            setEntries(response.data.data);
+            setTotalPages(Math.ceil(response.data.total / perPage));
         } catch (error) {
             console.error(error);
         }
@@ -49,28 +50,12 @@ export default function UserSearch() {
         setPage(prevPage => Math.max(prevPage - 1, 1));
     };
 
-
     const handleSort = (field) => {
         setSort(prevSort => {
             const newOrder = prevSort.field === field && prevSort.order === 'asc' ? 'desc' : 'asc';
-            setEntries(prevEntries => [...prevEntries].sort((a, b) => {
-                if (a[field] < b[field]) return newOrder === 'asc' ? -1 : 1;
-                if (a[field] > b[field]) return newOrder === 'asc' ? 1 : -1;
-                return 0;
-            }));
             return {field, order: newOrder};
         });
     };
-    
-    const sortEntries = () => {
-        setEntries([...rawEntries].sort((a, b) => {
-            if (a[sort.field] < b[sort.field]) return sort.order === 'asc' ? -1 : 1;
-            if (a[sort.field] > b[sort.field]) return sort.order === 'asc' ? 1 : -1;
-            return 0;
-        }));
-    };
-  
-
 
     const ArrowIcon = ({ field }) => (
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"  fill="#e8eaed" >
