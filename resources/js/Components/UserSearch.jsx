@@ -1,20 +1,21 @@
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
-export default function Search({model}) {
+export default function UserSearch() {
     const input = useRef();
     const [search, setSearch] = useState('');
     const [entries, setEntries] = useState([]);
     const [page, setPage] = useState(1);
-    const [perPage, setPerPage] = useState(10);
+    const [perPage] = useState(10); // Make perPage unchangeable
+    const [totalPages, setTotalPages] = useState(0); // Add state for total pages
 
     useEffect(() => {
         fetchEntries();
-    }, [search]); // Add this line
+    }, [search, page]); // Add page to the dependency array
 
     const fetchEntries = async () => {
         try {
-            const response = await axios.get(route(`admin.${model.toLowerCase()}.index`), {
+            const response = await axios.get(route('admin.users.index'), {
                 params: {
                     search,
                     page,
@@ -22,6 +23,7 @@ export default function Search({model}) {
                 }
             });
             setEntries(response.data.data); // Extract the actual data array from the response
+            setTotalPages(Math.ceil(response.data.total / perPage)); // Calculate total pages
         } catch (error) {
             console.error(error);
         }
@@ -29,6 +31,16 @@ export default function Search({model}) {
 
     const handleSearch = (e) => {
         setSearch(e.target.value);
+    };
+
+    const handleNextPage = () => {
+        if (page < totalPages) { // Check if current page is less than total pages
+            setPage(prevPage => prevPage + 1);
+        }
+    };
+
+    const handlePrevPage = () => {
+        setPage(prevPage => Math.max(prevPage - 1, 1));
     };
 
     return (
@@ -40,7 +52,7 @@ export default function Search({model}) {
                         className='border-0 dark:border-0 bg-stone-200 dark:bg-gray-900 dark:text-gray-300 focus:border-0 dark:focus:border-0 focus:ring-0 dark:focus:ring-0 rounded-md shadow-sm pl-10'
                         ref={input}
                         value={search}
-                        placeholder={`Search ${model}`}
+                        placeholder={`Search Users...`}
                         onChange={handleSearch}
                     />
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -99,7 +111,21 @@ export default function Search({model}) {
                 </table>
             </div>
             <div>
-                {/* Render your pagination controls here */}
+                <div>
+                    <div className="flex justify-between items-center my-4">
+                        <button onClick={handlePrevPage} className="text-blue-500 hover:text-blue-700 dark:text-white dark:hover:text-gray-300 font-bold py-2 px-4 rounded">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"  fill="currentColor">
+                                <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z"/>
+                            </svg>
+                        </button>
+                        <span className="text-gray-700 dark:text-gray-300">{page}</span>
+                        <button onClick={handleNextPage} className={`text-blue-500 hover:text-blue-700 dark:text-white dark:hover:text-gray-300 font-bold py-2 px-4 rounded ${page >= totalPages ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="currentColor">
+                                <path d="m321-80-71-71 329-329-329-329 71-71 400 400L321-80Z"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     );
