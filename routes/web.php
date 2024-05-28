@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\AdminEditController; 
 
 Route::get('/', function () {
     return Inertia::render('Home', [
@@ -38,6 +39,7 @@ Route::middleware('role:admin')->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
     Route::get('/admin/products', [AdminController::class, 'products'])->name('admin.products.index');
     Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users.index');
+    Route::get('/admin/edit', [AdminEditController::class, 'edit'])->name('admin.users.edit');
 });
 
 require __DIR__.'/auth.php';
