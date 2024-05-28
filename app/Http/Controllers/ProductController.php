@@ -2,13 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(): Response
     {
-        //
+        return Inertia::render('Products/Index', [
+            'products' => Product::with('thumbnail')->get()
+        ]);
     }
 
     public function create()
@@ -23,7 +28,9 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        //
+        return Inertia::render('Products/Show', [
+            'product' => Product::find($id)
+        ]);
     }
 
     public function edit($id)
