@@ -1,11 +1,12 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AdminUserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Http\Controllers\AdminEditController; 
+use App\Http\Controllers\AdminEditController;
 
 Route::get('/', function () {
     return Inertia::render('Home', [
@@ -37,9 +38,11 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware('role:admin')->group(function () {
     Route::get('/admin', [AdminController::class, 'index'])->name('admin.index');
-    Route::get('/admin/products', [AdminController::class, 'products'])->name('admin.products.index');
-    Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users.index');
-    Route::get('/admin/edit', [AdminEditController::class, 'edit'])->name('admin.users.edit');
+    Route::get('/admin/users', [AdminUserController::class, 'index'])->name('admin.users.index');
+    Route::put('/admin/edit/{id}', [AdminUserController::class, 'update'])->name('admin.users.update');
+    Route::put('/admin/edit/pass/{id}', [AdminUserController::class, 'updatePass'])->name('admin.users.password');
+    Route::delete('/admin/delete/{id}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
+    Route::post('/admin/users' , [AdminUserController::class, 'store'])->name('admin.users.store');
 });
 
 require __DIR__.'/auth.php';

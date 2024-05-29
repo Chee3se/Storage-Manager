@@ -1,8 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import Modal from '@/Components/Modal.jsx';
+import EditUserForm from "@/Components/EditUserForm.jsx";
+import EditUserPassForm from "@/Components/EditUserPassForm.jsx";
+import AddUserForm from "@/Components/AddUserForm.jsx";
 
-export default function UserSearch() {
+export default function UserSearch({ user }) {
     const input = useRef();
     const [search, setSearch] = useState('');
     const [entries, setEntries] = useState([]);
@@ -10,6 +13,10 @@ export default function UserSearch() {
     const [perPage] = useState(10);
     const [totalPages, setTotalPages] = useState(0);
     const [sort, setSort] = useState({field: 'id', order: 'asc'})
+    const [showEditModal, setShowEditModal] = useState(false)
+    const [showEditPassModal, setShowEditPassModal] = useState(false)
+    const [selectedEntry, setSelectedEntry] = useState(null)
+    const [showAddUserModal, setShowAddUserModal] = useState(false);
 
     useEffect(() => {
         fetchEntries();
@@ -57,6 +64,45 @@ export default function UserSearch() {
         });
     };
 
+    const handleDeleteClick = async (entry) => {
+        try {
+            await axios.delete(route('admin.users.destroy', entry.id));
+            fetchEntries(); // refresh the user list
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const handleEditClick = (entry) => {
+        setSelectedEntry(entry);
+        setShowEditModal(true);
+    }
+
+    const closeEditModal = () => {
+        setShowEditModal(false);
+        fetchEntries();
+    }
+
+    const handleEditPassClick = (entry) => {
+        setSelectedEntry(entry);
+        setShowEditPassModal(true);
+    }
+
+    const closeEditPassModal = () => {
+        setShowEditPassModal(false);
+        fetchEntries();
+    }
+
+    const handleAddUserClick = () => {
+        setShowAddUserModal(true);
+    }
+
+    const closeAddUserModal = () => {
+        setShowAddUserModal(false);
+    }
+
+
+
     const ArrowIcon = ({ field }) => (
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"  fill="#e8eaed" className='fill-black dark:fill-white'>
         <path d={sort.field === field && sort.order === 'asc' ? "M7 14l5-5 5 5z" : "M7 10l5 5 5-5z"} />
@@ -81,8 +127,14 @@ export default function UserSearch() {
                               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
                 </div>
+                <button onClick={handleAddUserClick} className="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                </button>
+                <AddUserForm onClose={closeAddUserModal} show={showAddUserModal}/>
             </div>
-            <div style={{ width: '100%', overflowX: 'auto' }}>
+            <div style={{width: '100%', overflowX: 'auto'}}>
                 <table
                     className="my-4 min-w-full divide-y divide-gray-200 dark:divide-gray-700 rounded-lg overflow-hidden"
                     style={{minWidth: '1000px'}}>
@@ -131,24 +183,32 @@ export default function UserSearch() {
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm text-gray-900 dark:text-gray-100">
-                                    <button className='bg-blue-800 p-2 rounded-lg text-white hover:bg-blue-600 duration-200 mr-3' href='/admin/edit'>
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed" className='fill-white'>
-                                            <path d="M160-400v-80h280v80H160Zm0-160v-80h440v80H160Zm0-160v-80h440v80H160Zm360 560v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/>
-                                        </svg>
-                                    </button>
-
-                                    <button className='bg-red-800 p-2 rounded-lg text-white hover:bg-red-600 duration-200 mr-3'>
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"
-                                            ><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
-                                        </svg>
-                                    </button> 
-                                    
-                                    <button className='bg-cyan-800 p-2 rounded-lg text-white hover:bg-cyan-600 duration-200 mr-3'>
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
-                                            <path d="M80-200v-80h800v80H80Zm46-242-52-30 34-60H40v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Z"/>
-                                        </svg> 
-                                    </button>
-                                        </div>
+                                    {user.id === entry.id ? (
+                                        <p className="text-blue-500 dark:text-blue-400 py-2 font-medium text-center pr-6"
+                                        >you</p>
+                                    ) : (
+                                    <>
+                                        {/* Edit */}
+                                        <button className='bg-blue-800 p-2 rounded-lg text-white hover:bg-blue-600 duration-200 mr-3' onClick={() => handleEditClick(entry)}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed" className='fill-white'>
+                                                <path d="M160-400v-80h280v80H160Zm0-160v-80h440v80H160Zm0-160v-80h440v80H160Zm360 560v-123l221-220q9-9 20-13t22-4q12 0 23 4.5t20 13.5l37 37q8 9 12.5 20t4.5 22q0 11-4 22.5T863-380L643-160H520Zm300-263-37-37 37 37ZM580-220h38l121-122-18-19-19-18-122 121v38Zm141-141-19-18 37 37-18-19Z"/>
+                                            </svg>
+                                        </button>
+                                        {/* Delete */}
+                                        <button className='bg-red-800 p-2 rounded-lg text-white hover:bg-red-600 duration-200 mr-3' onClick={() => handleDeleteClick(entry)}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed"
+                                                ><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/>
+                                            </svg>
+                                        </button>
+                                        {/* Change Password */}
+                                        <button className='bg-cyan-800 p-2 rounded-lg text-white hover:bg-cyan-600 duration-200 mr-3' onClick={() => handleEditPassClick(entry)}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e8eaed">
+                                                <path d="M80-200v-80h800v80H80Zm46-242-52-30 34-60H40v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Zm320 0-52-30 34-60h-68v-60h68l-34-58 52-30 34 58 34-58 52 30-34 58h68v60h-68l34 60-52 30-34-60-34 60Z"/>
+                                            </svg>
+                                        </button>
+                                    </>
+                                )}
+                                </div>
                             </td>
                         </tr>
                     ))}
@@ -172,6 +232,14 @@ export default function UserSearch() {
                     </div>
                 </div>
             </div>
+            <Modal onClose={closeEditModal} show={showEditModal} entry={selectedEntry}>
+                <p className="font-medium text-6xl p-4 text-center dark:text-amber-50">Edit a user</p>
+                <EditUserForm user={selectedEntry} onSuccess={closeEditModal}/>
+            </Modal>
+            <Modal onClose={closeEditPassModal} show={showEditPassModal} entry={selectedEntry}>
+                <p className="font-medium text-6xl p-4 text-center dark:text-amber-50">Edit password</p>
+                <EditUserPassForm user={selectedEntry} onSuccess={closeEditPassModal}/>
+            </Modal>
         </div>
     );
 }
