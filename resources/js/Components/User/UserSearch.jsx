@@ -5,7 +5,7 @@ import EditUserForm from "@/Components/User/EditUserForm.jsx";
 import EditUserPassForm from "@/Components/User/EditUserPassForm.jsx";
 import AddUserForm from "@/Components/User/AddUserForm.jsx";
 
-export default function UserSearch({ user }) {
+export default function UserSearch({ user, className = '' }) {
     const input = useRef();
     const [search, setSearch] = useState('');
     const [entries, setEntries] = useState([]);
@@ -105,12 +105,12 @@ export default function UserSearch({ user }) {
 
     const ArrowIcon = ({ field }) => (
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"  fill="#e8eaed" className='fill-black dark:fill-white'>
-        <path d={sort.field === field && sort.order === 'asc' ? "M7 14l5-5 5 5z" : "M7 10l5 5 5-5z"} />
-    </svg>
-    );
+            <path d={sort.field === field && sort.order === 'asc' ? "M7 14l5-5 5 5z" : "M7 10l5 5 5-5z"} />
+        </svg>
+    )
 
     return (
-        <div className="bg-stone-100 dark:bg-gray-950 px-4 py-2 rounded-md" style={{maxWidth: '100%'}}>
+        <div className={`bg-stone-100 dark:bg-gray-950 px-4 py-2 rounded-md ${className}`} style={{maxWidth: '100%'}}>
             <div className="relative flex items-center gap-2">
                 <div className="relative">
                     <input
@@ -218,7 +218,7 @@ export default function UserSearch({ user }) {
             <div>
                 <div>
                     <div className="flex justify-between items-center my-4">
-                        <button onClick={handlePrevPage} className="text-blue-500 hover:text-blue-700 dark:text-white dark:hover:text-gray-300 font-bold py-2 px-4 rounded">
+                        <button onClick={handlePrevPage} className={`text-blue-500 hover:text-blue-700 dark:text-white dark:hover:text-gray-300 font-bold py-2 px-4 rounded ${page === 1 ? 'opacity-50 cursor-not-allowed' : ''}`}>
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"  fill="currentColor">
                                 <path d="M400-80 0-480l400-400 71 71-329 329 329 329-71 71Z"/>
                             </svg>

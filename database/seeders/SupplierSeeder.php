@@ -16,5 +16,7 @@ class SupplierSeeder extends Seeder
         Supplier::create(['name' => 'Elite Supplier']);
         Supplier::create(['name' => 'Prime Source']);
         Supplier::create(['name' => 'Global Supply']);
+        Supplier::create(['name' => 'Mega Corp']);
+        Supplier::create(['name' => 'Superior Goods']);
     }
 }
