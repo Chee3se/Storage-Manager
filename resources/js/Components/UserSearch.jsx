@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import Modal from '@/Components/Modal.jsx';
-import EditUserForm from "@/Components/EditUserForm.jsx";
-import EditUserPassForm from "@/Components/EditUserPassForm.jsx";
-import AddUserForm from "@/Components/AddUserForm.jsx";
+import EditUserForm from "@/Components/User/EditUserForm.jsx";
+import EditUserPassForm from "@/Components/User/EditUserPassForm.jsx";
+import AddUserForm from "@/Components/User/AddUserForm.jsx";
 
 export default function UserSearch({ user }) {
     const input = useRef();
@@ -127,7 +127,7 @@ export default function UserSearch({ user }) {
                               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
                 </div>
-                <button onClick={handleAddUserClick} className="btn btn-primary">
+                <button onClick={handleAddUserClick} className="bg-green-700 p-2 rounded-lg text-white hover:bg-green-600 duration-200 ml-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                     </svg>
@@ -184,7 +184,7 @@ export default function UserSearch({ user }) {
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm text-gray-900 dark:text-gray-100">
                                     {user.id === entry.id ? (
-                                        <p className="text-blue-500 dark:text-blue-400 py-2 font-medium text-center pr-6"
+                                        <p className="text-green-600 dark:text-green-400 py-2 font-bold text-center pr-5"
                                         >you</p>
                                     ) : (
                                     <>

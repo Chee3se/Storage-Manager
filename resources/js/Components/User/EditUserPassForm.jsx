@@ -28,7 +28,7 @@ export default function EditUserPassForm({ user, onSuccess }) {
     };
 
     return (
-        <form onSubmit={submit} method="POST" className="px-10 pb-4">
+        <form onSubmit={submit} method="POST" className="px-10 pb-4 flex flex-col gap-4">
             <div>
                 <InputLabel htmlFor="password" value="Password"/>
                 <TextInput
