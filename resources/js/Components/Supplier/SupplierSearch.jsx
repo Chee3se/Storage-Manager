@@ -206,8 +206,8 @@ export default function SupplierSearch({ className = '' }) {
                 </div>
             </div>
             <Modal onClose={closeEditModal} show={showEditModal} entry={selectedEntry}>
-                <p className="font-medium text-6xl p-4 text-center dark:text-amber-50">Edit a category</p>
-                <EditSupplierForm category={selectedEntry} onSuccess={closeEditModal}/>
+                <p className="font-medium text-6xl p-4 text-center dark:text-amber-50">Edit a supplier</p>
+                <EditSupplierForm supplier={selectedEntry} onSuccess={closeEditModal}/>
             </Modal>
         </div>
     )
