@@ -20,6 +20,12 @@ export default function HistorySearch({ className = '' }) {
         setPage(1);
     }, [search, sort]);
 
+    useEffect(() => {
+        fetchEntries();
+        const intervalId = setInterval(fetchEntries, 5000);
+        return () => clearInterval(intervalId);
+    }, [search, page, sort]);
+
     const fetchEntries = async () => {
         try {
             const response = await axios.get(route('history.all'), {
