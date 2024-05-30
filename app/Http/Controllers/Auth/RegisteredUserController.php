@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActionHistory;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -44,7 +45,21 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
+        ActionHistory::create([
+            'user_id' => $user->id,
+            'action' => 'register',
+            'model' => 'user',
+            'new_value' => json_encode($user->getAttributes())
+        ]);
+
         Auth::login($user);
+
+        ActionHistory::create([
+            'user_id' => $user->id,
+            'action' => 'login',
+            'model' => 'user',
+            'new_value' => json_encode($user->getAttributes())
+        ]);
 
         return redirect(route('home', absolute: false));
     }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('action_histories', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->enum('action', ['create', 'update', 'delete', 'other']);
+            $table->enum('action', ['create', 'update', 'delete', 'login', 'logout', 'register', 'other']);
             $table->string('model');
             $table->text('old_value')->nullable();
             $table->text('new_value')->nullable();

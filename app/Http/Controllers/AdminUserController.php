@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActionHistory;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -45,6 +46,14 @@ class AdminUserController extends Controller
         $user->email = $request->email;
         $user->syncRoles($request->role);
         $user->save();
+
+        ActionHistory::create([
+            'user_id' => auth()->id(),
+            'action' => 'update',
+            'model' => 'user',
+            'old_value' => json_encode($user->getOriginal()),
+            'new_value' => json_encode($user->getAttributes())
+        ]);
     }
 
     public function updatePass(Request $request, $id)
@@ -56,12 +65,27 @@ class AdminUserController extends Controller
         $user = User::find($id);
         $user->password = bcrypt($request->password);
         $user->save();
+
+        ActionHistory::create([
+            'user_id' => auth()->id(),
+            'action' => 'update',
+            'model' => 'user',
+            'old_value' => json_encode($user->getOriginal()),
+            'new_value' => json_encode($user->getAttributes())
+        ]);
     }
 
     public function destroy($id)
     {
         $user = User::find($id);
         $user->delete();
+
+        ActionHistory::create([
+            'user_id' => auth()->id(),
+            'action' => 'delete',
+            'model' => 'user',
+            'old_value' => json_encode($user->getOriginal())
+        ]);
     }
 
     public function store(Request $request)
@@ -79,5 +103,12 @@ class AdminUserController extends Controller
         $user->password = bcrypt($request->password);
         $user->save();
         $user->assignRole($request->role);
+
+        ActionHistory::create([
+            'user_id' => auth()->id(),
+            'action' => 'create',
+            'model' => 'user',
+            'new_value' => json_encode($user->getAttributes())
+        ]);
     }
 }

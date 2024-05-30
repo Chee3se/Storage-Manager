@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActionHistory;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -32,6 +33,13 @@ class AdminCategoriesController extends Controller
         $category = new Category();
         $category->name = $request->name;
         $category->save();
+
+        ActionHistory::create([
+            'user_id' => auth()->id(),
+            'action' => 'create',
+            'model' => 'category',
+            'new_value' => json_encode($category->getAttributes())
+        ]);
     }
 
     public function update(Request $request, $id) {
@@ -42,10 +50,25 @@ class AdminCategoriesController extends Controller
         $category = Category::find($id);
         $category->name = $request->name;
         $category->save();
+
+        ActionHistory::create([
+            'user_id' => auth()->id(),
+            'action' => 'update',
+            'model' => 'category',
+            'old_value' => json_encode($category->getOriginal()),
+            'new_value' => json_encode($category->getAttributes())
+        ]);
     }
 
     public function destroy($id) {
         $category = Category::find($id);
         $category->delete();
+
+        ActionHistory::create([
+            'user_id' => auth()->id(),
+            'action' => 'delete',
+            'model' => 'category',
+            'old_value' => json_encode($category->getOriginal())
+        ]);
     }
 }
