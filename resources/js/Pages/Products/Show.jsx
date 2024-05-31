@@ -16,6 +16,7 @@ export default function Show({ auth, product }) {
                                 <h1 className="text-xl font-bold">{product.name}</h1>
                                 <p>{product.description}</p>
                                 <p>Price: {product.price}</p>
+                                <img src={product.thumbnail?.url} alt={product.name} className="h-80" />
                             </div>
                         </div>
                     </div>
