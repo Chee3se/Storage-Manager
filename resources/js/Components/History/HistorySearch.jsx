@@ -4,8 +4,11 @@ import { formatDistanceToNow, parseISO } from 'date-fns';
 import Modal from "@/Components/Modal";
 
 export default function HistorySearch({ className = '' }) {
+    const actionTypes = ['create', 'update', 'delete', 'login', 'logout', 'register', 'other'];
+
     const input = useRef()
     const [search, setSearch] = useState('')
+    const [actionType, setActionType] = useState('')
     const [entries, setEntries] = useState([])
     const [page, setPage] = useState(1)
     const [perPage] = useState(10)
@@ -14,23 +17,24 @@ export default function HistorySearch({ className = '' }) {
 
     useEffect(() => {
         fetchEntries();
-    }, [search, page, sort]);
+    }, [search, page, sort, actionType]);
 
     useEffect(() => {
         setPage(1);
-    }, [search, sort]);
+    }, [search, sort, actionType]);
 
     useEffect(() => {
         fetchEntries();
         const intervalId = setInterval(fetchEntries, 5000);
         return () => clearInterval(intervalId);
-    }, [search, page, sort]);
+    }, [search, page, sort, actionType]);
 
     const fetchEntries = async () => {
         try {
             const response = await axios.get(route('history.all'), {
                 params: {
                     search,
+                    actionType,
                     page,
                     perPage,
                     sort: sort
@@ -45,6 +49,10 @@ export default function HistorySearch({ className = '' }) {
 
     const handleSearch = (e) => {
         setSearch(e.target.value);
+    }
+
+    const handleActionChange = (e) => {
+        setActionType(e.target.value);
     }
 
     const handleNextPage = () => {
@@ -107,6 +115,13 @@ export default function HistorySearch({ className = '' }) {
                               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                     </svg>
                 </div>
+                <select value={actionType} onChange={handleActionChange}
+                        className='ml-2 rounded-md dark:bg-black dark:text-white'>
+                    <option value="">All</option>
+                    {actionTypes.map(action => (
+                        <option key={action} value={action}>{action}</option>
+                    ))}
+                </select>
             </div>
             <div style={{width: '100%', overflowX: 'auto'}}>
                 <table
@@ -138,6 +153,7 @@ export default function HistorySearch({ className = '' }) {
                     <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
                     {entries.map(entry => (
                         <tr key={entry.id}>
+                            {console.log(entry.old)}
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm text-gray-900 dark:text-gray-100">{entry.user.name}</div>
                             </td>

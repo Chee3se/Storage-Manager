@@ -38,7 +38,7 @@ class AdminCategoriesController extends Controller
             'user_id' => auth()->id(),
             'action' => 'create',
             'model' => 'category',
-            'new_value' => json_encode($category->getAttributes())
+            'new_value' => json_encode($category)
         ]);
     }
 
@@ -48,6 +48,7 @@ class AdminCategoriesController extends Controller
         ]);
 
         $category = Category::find($id);
+        $oldCategory = $category;
         $category->name = $request->name;
         $category->save();
 
@@ -55,20 +56,21 @@ class AdminCategoriesController extends Controller
             'user_id' => auth()->id(),
             'action' => 'update',
             'model' => 'category',
-            'old_value' => json_encode($category->getOriginal()),
-            'new_value' => json_encode($category->getAttributes())
+            'old_value' => json_encode($oldCategory),
+            'new_value' => json_encode($category)
         ]);
     }
 
     public function destroy($id) {
         $category = Category::find($id);
+        $oldCategory = $category;
         $category->delete();
 
         ActionHistory::create([
             'user_id' => auth()->id(),
             'action' => 'delete',
             'model' => 'category',
-            'old_value' => json_encode($category->getOriginal())
+            'old_value' => json_encode($oldCategory)
         ]);
     }
 }
