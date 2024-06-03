@@ -10,16 +10,16 @@ export default function ThemeButton() {
         const dark = document.getElementById("theme-dark");
         const light = document.getElementById("theme-light");
         if (document.documentElement.classList.contains("dark")) {
-            dark.classList.add("animate-bounce");
+            dark.classList.add("animate-spin");
             setTimeout(() => {
-                dark.classList.remove("animate-bounce");
+                dark.classList.remove("animate-spin");
                 document.documentElement.classList.remove("dark");
                 localStorage.setItem("color-theme", "light");
             }, 700);
         } else {
-            light.classList.add("animate-bounce");
+            light.classList.add("animate-spin");
             setTimeout(() => {
-                light.classList.remove("animate-bounce");
+                light.classList.remove("animate-spin");
                 document.documentElement.classList.add("dark");
                 localStorage.setItem("color-theme", "dark");
             }, 700);
