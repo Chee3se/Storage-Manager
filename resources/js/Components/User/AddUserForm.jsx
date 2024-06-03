@@ -18,7 +18,7 @@ export default function AddUserForm({ onClose, show }) {
 
     const submit = (e) => {
         e.preventDefault();
-        post(route('admin.users.store'))
+        post(route('product.store'))
             .then(() => {
                 if (onClose) {
                     onClose();
