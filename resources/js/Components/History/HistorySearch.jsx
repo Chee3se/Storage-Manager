@@ -10,7 +10,7 @@ export default function HistorySearch({ className = '' }) {
     const [page, setPage] = useState(1)
     const [perPage] = useState(10)
     const [totalPages, setTotalPages] = useState(0)
-    const [sort, setSort] = useState({field: 'id', order: 'asc'})
+    const [sort, setSort] = useState({field: 'created_at', order: 'desc'})
 
     useEffect(() => {
         fetchEntries();
@@ -64,6 +64,25 @@ export default function HistorySearch({ className = '' }) {
         });
     }
 
+    const getActionColor = (action) => {
+        switch(action) {
+            case 'delete':
+                return 'text-red-500';
+            case 'create':
+                return 'text-green-500';
+            case 'update':
+                return 'text-yellow-500';
+            case 'login':
+                return 'text-blue-500';
+            case 'logout':
+                return 'text-purple-500';
+            case 'register':
+                return 'text-orange-500';
+            default:
+                return 'text-gray-500';
+        }
+    }
+
     const ArrowIcon = ({ field }) => (
         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24"  fill="#e8eaed" className='fill-black dark:fill-white'>
             <path d={sort.field === field && sort.order === 'asc' ? "M7 14l5-5 5 5z" : "M7 10l5 5 5-5z"} />
@@ -95,12 +114,6 @@ export default function HistorySearch({ className = '' }) {
                     <thead className="bg-gray-50 dark:bg-gray-800">
                     <tr>
                         <th scope="col"
-                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                            style={{minWidth: '100px'}}>
-                            <button onClick={() => handleSort('id')} className='flex flex-row'>ID <ArrowIcon
-                                field='id'/></button>
-                        </th>
-                        <th scope="col"
                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                             <button onClick={() => handleSort('user.name')} className='flex flex-row'>User <ArrowIcon
                                 field='user.name'/></button>
@@ -126,16 +139,13 @@ export default function HistorySearch({ className = '' }) {
                     {entries.map(entry => (
                         <tr key={entry.id}>
                             <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm text-gray-900 dark:text-gray-100">{entry.id}</div>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm text-gray-900 dark:text-gray-100">{entry.user.name}</div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm text-gray-900 dark:text-gray-100">{entry.model}</div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="text-sm text-gray-900 dark:text-gray-100">{entry.action}</div>
+                                <div className={`text-sm ${getActionColor(entry.action)}`}>{entry.action}</div>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="text-sm text-gray-900 dark:text-gray-100">

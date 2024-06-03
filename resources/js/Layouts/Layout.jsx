@@ -115,6 +115,19 @@ export default function Layout({ user, header, children }) {
                         <ResponsiveNavLink href={route('home')} active={route().current('home')}>
                             Home
                         </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('product.index')} active={route().current('product.index')}>
+                            Products
+                        </ResponsiveNavLink>
+                        {user?.roles[0]?.name === 'admin' && (
+                            <>
+                                <ResponsiveNavLink href={route('history.index')} active={route().current('history.index')}>
+                                    History
+                                </ResponsiveNavLink>
+                                <ResponsiveNavLink href={route('admin.index')} active={route().current('admin.index')}>
+                                    Admin
+                                </ResponsiveNavLink>
+                            </>
+                        )}
                     </div>
 
                     {user ? (<div className="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">

@@ -14,10 +14,7 @@ export default function Home({ auth }) {
                 </div>
             </div>
             <div className="text-center">
-                <h1 className="text-gray-500 dark:text-gray-300 text-2xl">Did you know you have permissions to</h1>
-                <div className="w-full h-full flex flex-row flex-wrap justify-center content-center">
-                    <HomeCard permissions={auth.permissions}/>
-                </div>
+                <h1 className="text-gray-500 dark:text-gray-300 text-2xl">Did you know you have permissions of <span className=" font-bold">{auth.role}</span> </h1>
             </div>
         </Layout>
     );

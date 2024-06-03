@@ -18,6 +18,12 @@ class PermissionSeeder extends Seeder
         $worker = Role::findByName('worker');
         $sorter = Role::findByName('sorter');
 
+        $adminPermissions = [
+            Permission::create(['name' => 'create users']),
+            Permission::create(['name' => 'edit users']),
+            Permission::create(['name' => 'delete users'])
+        ];
+
         $workerPermissions = [
             Permission::create(['name' => 'create products']),
             Permission::create(['name' => 'edit products']),
@@ -27,14 +33,17 @@ class PermissionSeeder extends Seeder
             Permission::create(['name' => 'delete orders'])
         ];
 
-        $adminPermissions = [
-            Permission::create(['name' => 'create users']),
-            Permission::create(['name' => 'edit users']),
-            Permission::create(['name' => 'delete users'])
+        $sorterPermissions = [
+            Permission::create(['name' => 'edit shelves']),
+            Permission::create(['name' => 'delete shelves']),
+            Permission::create(['name' => 'create shelves']),
+            Permission::create(['name' => 'move products']),
         ];
 
-        $admin->syncPermissions(array_merge($adminPermissions, $workerPermissions));
+        $admin->syncPermissions(array_merge($adminPermissions, $workerPermissions, $sorterPermissions));
 
-        $worker->syncPermissions($workerPermissions);
+        $worker->syncPermissions(array_merge($workerPermissions, $sorterPermissions));
+
+        $sorter->syncPermissions($sorterPermissions);
     }
 }

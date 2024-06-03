@@ -41,6 +41,14 @@ Route::middleware('role:admin')->group(function () {
     require __DIR__.'/history.php';
 });
 
+Route::middleware('role:admin|worker')->group(function () {
+    require __DIR__.'/order.php';
+});
+
+Route::middleware('role:admin|worker|sorter')->group(function () {
+    require __DIR__.'/shelves.php';
+});
+
 require __DIR__.'/auth.php';
 
 require __DIR__.'/products.php';
