@@ -13,4 +13,9 @@ class Product extends Model
     {
         return $this->hasOne(Image::class)->where('is_thumbnail', true);
     }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'product_categories');
+    }
 }

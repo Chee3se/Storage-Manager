@@ -37,7 +37,7 @@ Route::middleware('role:admin')->group(function () {
     require __DIR__.'/admin.php';
 });
 
-Route::middleware('role:admin')->group(function () {
+Route::middleware('role:admin|worker')->group(function () {
     require __DIR__.'/history.php';
 });
 

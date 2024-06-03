@@ -18,14 +18,14 @@ export default function Layout({ user, header, children }) {
                                 <ThemeButton />
                             </div>
 
-                            <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <div className="hidden items-center space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink href={route('home')} active={route().current('home')}>
                                     Home
                                 </NavLink>
                                 <NavLink href={route('product.index')} active={route().current('product.index')}>
                                     Products
                                 </NavLink>
-                                {user?.roles[0]?.name === 'admin' ? (
+                                {user?.roles[0]?.name === 'admin' || 'worker' ? (
                                     <NavLink href={route('history.index')} active={route().current('history.index')}>
                                         History
                                     </NavLink>

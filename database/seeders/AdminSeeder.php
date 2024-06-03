@@ -25,5 +25,11 @@ class AdminSeeder extends Seeder
             'password' => bcrypt('root'),
         ]);
         $worker->assignRole('worker');
+        $sorter = User::factory()->create([
+            'name' => 'sorter',
+            'email' => 'sorter@example.com',
+            'password' => bcrypt('root'),
+        ]);
+        $sorter->assignRole('sorter');
     }
 }

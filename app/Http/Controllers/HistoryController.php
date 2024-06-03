@@ -17,6 +17,7 @@ class HistoryController extends Controller
     public function all(Request $request)
     {
         $search = $request->get('search', '');
+        $actionType = $request->get('actionType', '');
         $page = $request->get('page', 1);
         $perPage = $request->get('perPage', 10);
         $sort = $request->get('sort', ['field' => 'id', 'order' => 'asc']);
@@ -27,6 +28,10 @@ class HistoryController extends Controller
             $query->where('action', 'like', '%' . $search . '%')
                 ->orWhere('model', 'like', '%' . $search . '%')
                 ->orWhere('created_at', 'like', '%' . $search . '%');
+        }
+
+        if ($actionType) {
+            $query->where('action', $actionType);
         }
 
         if ($sort['field'] === 'user.name') {
