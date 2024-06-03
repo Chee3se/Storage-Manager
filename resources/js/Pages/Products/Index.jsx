@@ -1,9 +1,15 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Layout from '@/Layouts/Layout';
 import { Head } from '@inertiajs/react';
+import AddProductForm from '@/Components/Products/AddProductForm';
 
 export default function Index({ auth, products }) {
-    console.log(products)
+    const [showProductForm, setShowProductForm] = useState(false); 
+
+    const toggleProductForm = () => {
+        setShowProductForm(!showProductForm);
+    };
+
     return (
         <Layout user={auth.user}>
             <Head title="Available products" />
@@ -21,7 +27,7 @@ export default function Index({ auth, products }) {
                 </div>
                 <div className="max-w-7xl sm:px-6 lg:px-8 grid lg:grid-cols-3 sm:grid-cols-2 items-center">
                     {products.map(product => (
-                        <div key={product.id} className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg w-80 border-0 hover:border-2 hover:border-black dark:hover:border-2 dark:hover:border-white mb-10 ">
+                        <div key={product.id} className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg w-80 border-0 hover:border-2 hover:border-black dark:hover:border-2 dark:hover:border-white mb-10">
                             <div className="flex-col flex text-gray-900 dark:text-gray-100 justify-center">
                                 <a href={`/products/${product.id}`}>
                                     <div className="flex justify-center">
@@ -32,7 +38,7 @@ export default function Index({ auth, products }) {
                                     </div>
                                 </a>
                             </div>
-                            </div>
+                        </div>
                     ))}
                 </div>
             </div>
