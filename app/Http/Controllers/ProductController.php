@@ -18,7 +18,9 @@ class ProductController extends Controller
 
     public function create()
     {
-        //
+        return Inertia::render('Products/create', [
+            'create'
+        ]); 
     }
 
     public function store(Request $request)
@@ -29,7 +31,7 @@ class ProductController extends Controller
     public function show($id)
     {
         return Inertia::render('Products/Show', [
-            'product' => Product::find($id)
+            'product' => Product::with('thumbnail')->find($id)
         ]);
     }
 
