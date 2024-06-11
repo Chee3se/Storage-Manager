@@ -25,37 +25,7 @@ class ProductController extends Controller
         ]);
     }
 
-public function store(Request $request)
-{
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'description' => 'required|string',
-        'price' => 'required|numeric|min:0',
-        'image' => 'required|image|mimes:jpeg,png|max:2048',
-    ]);
 
-    $product = new Product();
-    $product->name = $request->input('name');
-    $product->description = $request->input('description');
-    $product->price = $request->input('price');
-    $image = new Image();
-    
-    $product->supplier_id = 1;
-    $product->save();
-    
-
-    if ($request->hasFile('image')) {
-        $imagePath = $request->file('image')->store('products', 'public'); 
-        $image->url ='storage/' . $imagePath;
-        $image->is_thumbnail = true;
-        $image->product_id = $product->id;
-            
-        }
-
-    $image->save();
-
-    return redirect()->route('product.index')->with('success', 'Product created successfully!');
-}
     public function store(Request $request, $productId, $shelfId)
     {
         $product = Product::find($productId);
