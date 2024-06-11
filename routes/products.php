@@ -18,7 +18,8 @@ Route::middleware('auth')->group(function () {
 
     //Update
     Route::group(['middleware' => ['permission:edit products']], function () {
-        Route::get('/products/edit/{id}', [ProductController::class, 'edit'])->name('product.edit');
+        Route::post('/products/update/{id}', [ProductController::class, 'update'])->name('product.update');
+
         Route::patch('/products/{id}', [ProductController::class, 'update'])->name('product.update');
     });
 
@@ -26,4 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::group(['middleware' => ['permission:delete products']], function () {
         Route::delete('/products/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
     });
+
+    Route::post('/products/{productId}/shelves/{shelfId}', [ProductShelfController::class, 'store'])->name('product.shelf.store');
+
 });

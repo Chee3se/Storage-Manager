@@ -20,12 +20,24 @@ class ProductController extends Controller
     {
         return Inertia::render('Products/create', [
             'create'
-        ]); 
+        ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $productId, $shelfId)
     {
-        //
+        $product = Product::find($productId);
+        $shelf = Shelf::find($shelfId);
+
+        if (!$product || !$shelf) {
+            return response()->json(['error' => 'Invalid product or shelf'], 400);
+        }
+
+        $productShelf = new ProductShelf();
+        $productShelf->product_id = $productId;
+        $productShelf->shelf_id = $shelfId;
+        $productShelf->save();
+
+        return response()->json(['message' => 'Product added to shelf successfully'], 201);
     }
 
     public function show($id)
@@ -37,12 +49,17 @@ class ProductController extends Controller
 
     public function edit($id)
     {
-        //
+
     }
 
     public function update(Request $request, $id)
     {
-        //
+        $product = Product::find($id);
+        if ($request->has('shelf')) {
+            $product->shelf = $request->input('shelf');
+            $product->save();
+        }
+        return response()->json(['shelf' => $request->input('shelf')], 200);
     }
 
     public function destroy($id)

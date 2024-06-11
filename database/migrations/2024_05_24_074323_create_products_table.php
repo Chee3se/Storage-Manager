@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('description');
             $table->decimal('price', 8, 2);
+            $table->boolean('shelf');
             $table->foreignId('supplier_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

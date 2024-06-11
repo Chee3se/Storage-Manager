@@ -22,9 +22,11 @@ export default function EditUserForm({ user, onSuccess }) {
         formData.append('role', data.role);
 
         put(route('admin.users.update', user.id), formData)
-            .then(() => {
+            .then((e) => {
                 if (onSuccess) {
                     onSuccess();
+                }else{
+                    console.log(e);
                 }
             });
     };
