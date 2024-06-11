@@ -25,7 +25,7 @@ export default function Layout({ user, header, children }) {
                                 <NavLink href={route('product.index')} active={route().current('product.index')}>
                                     Products
                                 </NavLink>
-                                {user?.roles[0]?.name === 'admin' ? (
+                                {user?.roles[0]?.name === 'admin' || 'worker' ? (
                                     <NavLink href={route('history.index')} active={route().current('history.index')}>
                                         History
                                     </NavLink>
