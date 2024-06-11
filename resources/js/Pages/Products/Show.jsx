@@ -5,13 +5,7 @@ import { useEffect } from "react";
 import axios from "axios";
 export default function Show({ auth, product }) {
     const [productVar, setProduct] = useState(product);
-    console.log(
-        auth.role != "admin" && auth.role != "worker"
-            ? "slate"
-            : (productVar.shelf
-            ? "green"
-            : "red")
-    );
+
     useEffect(() => {
         setProduct(product);
     }, [product]);
